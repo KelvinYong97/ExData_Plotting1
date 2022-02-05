@@ -1,0 +1,101 @@
+---
+title: "Course Project 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## load libraries
+
+```{r}
+library(dplyr)
+```
+
+
+## Download data
+
+```{r}
+if(!("exdata_data_household_power_consumption.zip" %in% dir())) {
+    download.file(url = "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip" ,
+                  destfile = "exdata_data_household_power_consumption.zip")
+    unzip(zipfile = "exdata_data_household_power_consumption.zip")
+}
+```
+
+## Read data
+
+```{r}
+power_data <- read.table("household_power_consumption.txt",sep = ";",header = TRUE)
+```
+## View Data Summary
+
+```{r}
+str(power_data)
+```
+
+## only take 2 days data. 2007-02-01 and 2007-02-02
+
+```{r}
+power_subset <- power_data %>% filter(Date %in% c("1/2/2007", "2/2/2007"))
+unique(power_subset$Date)
+rm(power_data)
+```
+
+## convert columns to numeric
+
+```{r}
+power_subset[,c(3:9)] <- sapply(power_subset[,c(3:9)], as.numeric)
+power_subset$Date_Time <- strptime(paste(power_subset$Date,power_subset$Time), format = "%d/%m/%Y %H:%M:%S")
+```
+
+```{r}
+str(power_subset)
+```
+## Plot 1
+
+```{r}
+hist(power_subset$Global_active_power,main = "Global Active Power", col = "Red", xlab = "Global Active Power (kilowatts)")
+```
+
+## Plot 2
+
+```{r}
+with(power_subset,plot(Date_Time,Global_active_power, type = "l" ,  xlab = "" , ylab = "Global Active Power (kilowatts)"))
+```
+
+## Plot 3
+
+```{r}
+with(power_subset, {
+    plot(Date_Time, Sub_metering_1, ylab = "Energy sub metering", type = "l")
+    lines(Date_Time, Sub_metering_2 , col = "Red")
+    lines(Date_Time, Sub_metering_3, col = "Blue")
+})
+legend("topright", c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lty =1 ,col=c("black","red","blue"))
+```
+## Plot 4
+
+```{r}
+par(mfrow = c(2,2))
+with(power_subset,{
+    # 1
+    plot(Date_Time,Global_active_power, type = "l" ,  xlab = "" , ylab = "Global Active Power")
+    
+    # 2
+    plot(Date_Time,Voltage,type = "l", xlab = "datetime", ylab = "Voltage")
+    
+    # 3
+    plot(Date_Time, Sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering")
+    lines(Date_Time, Sub_metering_2 , col = "Red")
+    lines(Date_Time, Sub_metering_3, col = "Blue")
+    legend("top", c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), 
+           lty =1 ,col=c("black","red","blue"),cex = 0.8)
+    
+    # 4
+    plot(Date_Time,Global_reactive_power,type = "l", xlab = "datetime", ylab = "Global_reactive_power")
+})
+
+```
+
