@@ -26,7 +26,7 @@ power_subset$Date_Time <- strptime(paste(power_subset$Date,power_subset$Time), f
 str(power_subset)
 
 ## Plot 2
+png("plot2.png")
 with(power_subset,plot(Date_Time,Global_active_power, type = "l" ,  xlab = "" , ylab = "Global Active Power (kilowatts)"))
 
-dev.copy(device = png,file = "plot2.png")
 dev.off()

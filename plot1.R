@@ -26,7 +26,7 @@ power_subset$Date_Time <- strptime(paste(power_subset$Date,power_subset$Time), f
 str(power_subset)
 
 ## Plot 1
+png("plot1.png")
 hist(power_subset$Global_active_power,main = "Global Active Power", col = "Red", xlab = "Global Active Power (kilowatts)")
 
-dev.copy(device = png,file = "plot1.png")
 dev.off()

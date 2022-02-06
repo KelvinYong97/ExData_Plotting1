@@ -26,6 +26,7 @@ power_subset$Date_Time <- strptime(paste(power_subset$Date,power_subset$Time), f
 str(power_subset)
 
 ## Plot 4
+png("plot4.png")
 par(mfrow = c(2,2))
 with(power_subset,{
     # 1
@@ -45,5 +46,7 @@ with(power_subset,{
     plot(Date_Time,Global_reactive_power,type = "l", xlab = "datetime", ylab = "Global_reactive_power")
 })
 
-dev.copy(device = png,file = "plot4.png")
+
 dev.off()
+
+
